@@ -1,0 +1,24 @@
+<div class="team-directory">
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Search by name or email"
+    [(ngModel)]="searchQuery"
+  />
+
+  <div class="data-quality-banner" *ngIf="hasDataQualityIssues">
+    {{ invalidMembers.length }} member(s) are missing required data.
+  </div>
+
+  <ul class="member-list">
+    <li *ngFor="let member of filteredMembers" class="member-row">
+      <app-member-card [member]="member"></app-member-card>
+      <span class="initials">{{ getInitials(member.name) }}</span>
+      <div class="notes" [innerHTML]="trustNotes(member.notesHtml)"></div>
+    </li>
+  </ul>
+
+  <p class="duplicate-warning" *ngIf="duplicateIds.length">
+    {{ duplicateIds.length }} duplicate id(s) detected.
+  </p>
+</div>
