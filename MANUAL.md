@@ -1,1 +1,2 @@
 # ThrillhouseBot-test
+logbeacon service.
