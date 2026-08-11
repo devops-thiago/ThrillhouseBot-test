@@ -1,0 +1,19 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 1.5rem;
+  color: #1a1a1a;
+}
+
+.warning-banner {
+  background: #fff4e5;
+  border: 1px solid #f0b429;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.mentions-badge {
+  color: #1d4ed8;
+  font-weight: 600;
+}
