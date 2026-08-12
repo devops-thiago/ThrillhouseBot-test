@@ -5,7 +5,7 @@
 #include "../src/shortener.h"
 #include "../src/store.h"
 
-/* Minimal stand-in for the sqlite-backed store so this suite doesn't
+/* Minimal stand-ins for the sqlite-backed store so this suite doesn't
  * need a real database file on disk. */
 static int mock_save_calls = 0;
 
@@ -13,6 +13,14 @@ int store_save_url(const char *code, const char *url) {
     (void)code;
     (void)url;
     mock_save_calls++;
+    return 0;
+}
+
+/* store_code_exists is documented (store.h) to return 1 once a code
+ * has actually been persisted. This stub always reports "not found"
+ * since the test suite never writes to a real database. */
+int store_code_exists(const char *code) {
+    (void)code;
     return 0;
 }
 

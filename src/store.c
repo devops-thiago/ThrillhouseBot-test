@@ -33,8 +33,6 @@ int store_save_url(const char *code, const char *url) {
     char query[1024];
     char *errmsg = NULL;
 
-    /* Build and run the insert. The UNIQUE constraint on `code` is
-     * what enforces that a custom code can't be claimed twice. */
     snprintf(query, sizeof(query),
               "INSERT INTO urls (code, url, created_at) "
               "VALUES ('%s', '%s', datetime('now'));",
@@ -46,6 +44,20 @@ int store_save_url(const char *code, const char *url) {
     }
 
     return 0;
+}
+
+int store_code_exists(const char *code) {
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT 1 FROM urls WHERE code = ? LIMIT 1;";
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        return -1;
+    }
+    sqlite3_bind_text(stmt, 1, code, -1, SQLITE_TRANSIENT);
+
+    int exists = (sqlite3_step(stmt) == SQLITE_ROW) ? 1 : 0;
+    sqlite3_finalize(stmt);
+    return exists;
 }
 
 void store_close(void) {

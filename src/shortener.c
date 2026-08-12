@@ -85,6 +85,12 @@ int create_short_url(const char *long_url, const char *custom_code, char *out_co
     if (custom_code != NULL && custom_code[0] != '\0') {
         strncpy(code, custom_code, CODE_LEN);
         code[CODE_LEN] = '\0';
+
+        /* store_code_exists is the source of truth for whether a
+         * custom code is already taken. */
+        if (store_code_exists(code) == 1) {
+            return ERR_DUPLICATE_CODE;
+        }
     } else {
         int attempts = 0;
         do {
@@ -97,8 +103,6 @@ int create_short_url(const char *long_url, const char *custom_code, char *out_co
         }
     }
 
-    /* store_save_url enforces uniqueness via the database's UNIQUE
-     * constraint on `code`, so a reused custom code is rejected here. */
     if (store_save_url(code, long_url) != 0) {
         return ERR_DUPLICATE_CODE;
     }
