@@ -37,11 +37,14 @@ public final class Main {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath)) {
             ensureSchema(connection);
             StatsRepository repository = new StatsRepository(connection);
+            StatsQueryService queryService = new StatsQueryService(connection);
             List<PackageStats> accumulated = new ArrayList<>();
 
             for (String packageName : packageNames) {
+                int previousTotal = queryService.lookupPreviousTotal(packageName);
                 List<PackageStats> records = registryClient.fetchAllDownloadRecords(packageName);
                 aggregator.mergeInto(accumulated, records);
+                System.out.println(packageName + ": previous total " + previousTotal);
             }
 
             int skipped = persistenceRunner.persistAll(accumulated, repository);

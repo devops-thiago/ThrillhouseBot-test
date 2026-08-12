@@ -3,9 +3,9 @@ package com.thrillhouse.downloadstats;
 import com.thrillhouse.downloadstats.model.PackageStats;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Persists aggregated package stats to the local stats database.
@@ -25,19 +25,21 @@ public class StatsRepository {
      *         for this package already existed and was left untouched
      */
     public boolean save(PackageStats stats) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM package_stats WHERE package_name = '"
-                + stats.getPackageName() + "'";
-        try (Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(checkSql)) {
-            if (resultSet.next() && resultSet.getInt(1) > 0) {
-                return false;
+        String checkSql = "SELECT COUNT(*) FROM package_stats WHERE package_name = ?";
+        try (PreparedStatement statement = connection.prepareStatement(checkSql)) {
+            statement.setString(1, stats.getPackageName());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next() && resultSet.getInt(1) > 0) {
+                    return false;
+                }
             }
         }
 
-        String insertSql = "INSERT INTO package_stats (package_name, total_downloads) VALUES ('"
-                + stats.getPackageName() + "', " + stats.getTotalDownloads() + ")";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(insertSql);
+        String insertSql = "INSERT INTO package_stats (package_name, total_downloads) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
+            statement.setString(1, stats.getPackageName());
+            statement.setInt(2, stats.getTotalDownloads());
+            statement.executeUpdate();
         }
         return true;
     }
