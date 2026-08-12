@@ -34,8 +34,17 @@ def run(cfg):
     for entry in entries:
         record_result(conn, entry.domain, entry.days_remaining)
 
+    report(entries)
+
+
+def report(entries):
+    """Print the digest and let on-call know if anything needs attention.
+
+    Returns whatever alerts.send_digest_alert returns, so callers (and
+    tests) can tell whether a notification actually went out.
+    """
     print(format_digest(entries))
-    alerts.send_digest_alert(entries)
+    return alerts.send_digest_alert(entries)
 
 
 def history(cfg, domain):
