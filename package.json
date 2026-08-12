@@ -1,0 +1,15 @@
+{
+  "name": "backup-verifier",
+  "version": "1.0.0",
+  "description": "Verifies cloud backup objects against manifest records and reports drift",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/verifier.test.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.11.5"
+  }
+}
