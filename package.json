@@ -1,0 +1,19 @@
+{
+  "name": "license-auditor",
+  "version": "1.0.0",
+  "description": "Scans an organization's package registry and flags dependencies whose license is not on the approved allowlist.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  }
+}
