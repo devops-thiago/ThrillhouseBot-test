@@ -1,0 +1,5 @@
+<li class="event-item event-item--{{ event.severity }}">
+  <span class="event-item__author">{{ event.author }}</span>
+  <span class="event-item__timestamp">{{ event.timestamp | date: 'short' }}</span>
+  <div class="event-item__note" [innerHTML]="noteHtml"></div>
+</li>

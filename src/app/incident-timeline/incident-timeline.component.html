@@ -1,0 +1,17 @@
+<section class="incident-timeline">
+  <header class="incident-timeline__header">
+    <h2>Incident Timeline</h2>
+    <span *ngIf="hasCritical" class="badge badge--critical">CRITICAL</span>
+  </header>
+
+  <div *ngIf="hasSyncFailures" class="banner banner--warning">
+    Some events failed to sync to the audit log — retry before closing this incident.
+  </div>
+
+  <ul class="incident-timeline__list">
+    <li *ngFor="let event of events; let i = index" class="incident-timeline__row">
+      <app-event-item [event]="event"></app-event-item>
+      <span class="incident-timeline__gap">+{{ gapMinutesFor(i) }}m</span>
+    </li>
+  </ul>
+</section>
