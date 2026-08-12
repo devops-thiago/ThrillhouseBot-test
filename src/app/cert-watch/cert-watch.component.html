@@ -1,0 +1,21 @@
+<section class="cert-watch">
+  <header class="cert-watch__header">
+    <h2>Certificate Watch</h2>
+    <span *ngIf="hasExpiredCritical" class="badge badge--critical">EXPIRED CRITICAL CERTS</span>
+  </header>
+
+  <div *ngIf="hasOverdueRenewals" class="banner banner--warning">
+    Some certificates have an overdue renewal ticket — resolve before they expire.
+  </div>
+
+  <ul class="cert-watch__escalation-contacts">
+    <li *ngFor="let contact of escalationContacts">{{ contact }}</li>
+  </ul>
+
+  <ul class="cert-watch__list">
+    <li *ngFor="let cert of certificates" class="cert-watch__row">
+      <span class="cert-watch__owner-chip">{{ ownerInitials(cert.owner) }}</span>
+      <app-cert-item [certificate]="cert"></app-cert-item>
+    </li>
+  </ul>
+</section>

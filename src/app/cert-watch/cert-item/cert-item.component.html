@@ -1,0 +1,6 @@
+<div class="cert-item cert-item--{{ certificate.severity }}">
+  <span class="cert-item__cn">{{ certificate.commonName }}</span>
+  <span class="cert-item__issuer">{{ certificate.issuer }}</span>
+  <span class="cert-item__expiry">{{ certificate.expiresOn | date: 'mediumDate' }} ({{ certificate.daysUntilExpiry }}d)</span>
+  <div class="cert-item__note" [innerHTML]="noteHtml"></div>
+</div>
