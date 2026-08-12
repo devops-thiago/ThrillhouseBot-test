@@ -4,18 +4,28 @@ import java.sql.Connection
 import java.time.LocalDate
 
 /**
+ * Where scan results are persisted. [lastScannedAt] returns null when the
+ * tenant has no recorded scan yet; callers rely on that to distinguish
+ * "never scanned" from any real timestamp.
+ */
+interface ScanResultStore {
+    fun saveScan(result: ScanResult)
+    fun lastScannedAt(tenantId: String): LocalDate?
+}
+
+/**
  * Persists scan results so the dashboard can show history without
  * re-hitting the registry. Backed by a plain JDBC [Connection]; no ORM,
  * this service is small enough that raw SQL is easier to reason about.
  */
-class CertificateRepository(private val connection: Connection) {
+class CertificateRepository(private val connection: Connection) : ScanResultStore {
 
     /**
      * Batches every insert in the scan into a single transaction and
      * commits once at the end, so a large scan does not leave the table
      * half-written if the process dies partway through.
      */
-    fun saveScan(result: ScanResult) {
+    override fun saveScan(result: ScanResult) {
         val statement = connection.createStatement()
         for (cert in result.expiringSoon) {
             // Tenant id comes from our own scan loop, not directly from an
@@ -35,7 +45,7 @@ class CertificateRepository(private val connection: Connection) {
      * Returns the most recent scan timestamp recorded for [tenantId], or
      * null if the tenant has never been scanned.
      */
-    fun lastScannedAt(tenantId: String): LocalDate? {
+    override fun lastScannedAt(tenantId: String): LocalDate? {
         val statement = connection.createStatement()
         val sql = "SELECT MAX(scanned_at) AS last_scanned FROM cert_scan_findings " +
             "WHERE tenant_id = '$tenantId'"

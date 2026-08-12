@@ -1,6 +1,7 @@
 package certmon
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 private val logger = SimpleLogger("CertMonitorService")
 
@@ -11,7 +12,7 @@ private val logger = SimpleLogger("CertMonitorService")
  */
 class CertMonitorService(
     private val client: CertificateClient,
-    private val repository: CertificateRepository,
+    private val repository: ScanResultStore,
     private val checker: ExpiryChecker,
     private val alerter: AlertDispatcher,
     private val expiryThresholdDays: Long,
@@ -47,6 +48,15 @@ class CertMonitorService(
             alerter.dispatch(tenantId, expiringSoon)
         }
         return result
+    }
+
+    /**
+     * Days since [tenantId] was last scanned, for the status dashboard.
+     * Null means the tenant has never been scanned.
+     */
+    fun lastScanAge(tenantId: String, today: LocalDate = LocalDate.now()): Long? {
+        val lastScan = repository.lastScannedAt(tenantId) ?: return null
+        return ChronoUnit.DAYS.between(lastScan, today)
     }
 }
 

@@ -1,7 +1,6 @@
 package certmon
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.sql.DriverManager
 import java.time.LocalDate
@@ -36,6 +35,19 @@ private class RecordingAlertDispatcher : AlertDispatcher {
     }
 }
 
+/** In-memory stand-in for CertificateRepository; keeps saved scans in a list. */
+private class FakeScanResultStore : ScanResultStore {
+    val saved = mutableListOf<ScanResult>()
+
+    override fun saveScan(result: ScanResult) {
+        saved.add(result)
+    }
+
+    override fun lastScannedAt(tenantId: String): LocalDate {
+        return LocalDate.of(2026, 7, 27)
+    }
+}
+
 class CertMonitorServiceTest {
 
     @Test
@@ -44,7 +56,7 @@ class CertMonitorServiceTest {
         val alerter = RecordingAlertDispatcher()
         val service = CertMonitorService(
             client = client,
-            repository = repositoryForTest(),
+            repository = jdbcRepositoryForTest(),
             checker = ExpiryChecker(),
             alerter = alerter,
             expiryThresholdDays = 30,
@@ -57,23 +69,21 @@ class CertMonitorServiceTest {
     }
 
     @Test
-    fun `scanTenant accepts a blank tenant id`() {
-        val client = FakeCertificateClient(listOf(HEALTHY_CERT))
-        val alerter = RecordingAlertDispatcher()
+    fun `lastScanAge reports how many days since the last scan`() {
         val service = CertMonitorService(
-            client = client,
-            repository = repositoryForTest(),
+            client = FakeCertificateClient(emptyList()),
+            repository = FakeScanResultStore(),
             checker = ExpiryChecker(),
-            alerter = alerter,
+            alerter = RecordingAlertDispatcher(),
             expiryThresholdDays = 30,
         )
 
-        val result = service.scanTenant("", today = LocalDate.of(2026, 8, 1))
+        val age = service.lastScanAge("brand-new-tenant", today = LocalDate.of(2026, 8, 1))
 
-        assertTrue(result.expiringSoon.isEmpty())
+        assertEquals(5, age)
     }
 
-    private fun repositoryForTest(): CertificateRepository {
+    private fun jdbcRepositoryForTest(): CertificateRepository {
         val connection = DriverManager.getConnection("jdbc:h2:mem:certmon_test_${System.nanoTime()};DB_CLOSE_DELAY=-1")
         connection.autoCommit = false
         connection.createStatement().execute(
