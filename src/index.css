@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f7f7f8;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app__body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.macro-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.macro-list li {
+  margin-bottom: 4px;
+}
+
+.macro-list button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.macro-list li.active button {
+  border-color: #3b6fe0;
+  background: #eef2fd;
+}
+
+.detail {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px;
+  background: white;
+}
