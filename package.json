@@ -1,0 +1,15 @@
+{
+  "name": "branch-janitor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deletes stale GitHub branches after archiving them locally.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test",
+    "build": "node -e \"require('fs').cpSync('src','dist',{recursive:true})\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
