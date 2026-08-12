@@ -7,8 +7,15 @@ public class NotificationSenderTests
 {
     private sealed class FakeOwnerLookupRepository : IOwnerLookupRepository
     {
+        private readonly string? _email;
+
+        public FakeOwnerLookupRepository(string? email = "owner@example.com")
+        {
+            _email = email;
+        }
+
         public Task<string?> GetOwnerEmailAsync(string ownerId, CancellationToken ct = default) =>
-            Task.FromResult<string?>("owner@example.com");
+            Task.FromResult(_email);
     }
 
     private sealed class RecordingEmailClient : IEmailClient
@@ -44,13 +51,14 @@ public class NotificationSenderTests
     }
 
     [Fact]
-    public async Task SendExpiryNotificationsAsync_OwnerNotInDirectory_SendsGracefully()
+    public async Task SendExpiryNotificationsAsync_LegacyContactWithoutEmailFormat_StillGetsNotified()
     {
-        // owner-does-not-exist has no row in the owners table, exercising the
-        // "no matching owner" branch of the lookup.
+        // Some older owner records in the directory still hold a pre-migration
+        // contact handle instead of a real email address. Confirms the batch
+        // still notifies them instead of skipping the certificate entirely.
         var emailClient = new RecordingEmailClient();
-        var sender = new NotificationSender(new FakeOwnerLookupRepository(), emailClient);
-        var certificates = new List<CertificateRecord> { MakeCertificate("owner-does-not-exist") };
+        var sender = new NotificationSender(new FakeOwnerLookupRepository("legacy-contact-ops-team"), emailClient);
+        var certificates = new List<CertificateRecord> { MakeCertificate("owner-legacy-7") };
 
         await sender.SendExpiryNotificationsAsync(certificates);
 

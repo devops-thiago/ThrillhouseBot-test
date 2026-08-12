@@ -17,6 +17,11 @@ public sealed class EmailGatewayClient : IEmailClient
 
     public async Task SendAsync(string toAddress, string subject, string body, CancellationToken ct = default)
     {
+        if (!toAddress.Contains('@'))
+        {
+            return;
+        }
+
         var payload = new { to = toAddress, subject, body };
         using var response = await _http.PostAsJsonAsync("/v1/send", payload, ct);
         response.EnsureSuccessStatusCode();
