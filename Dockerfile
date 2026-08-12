@@ -1,4 +1,4 @@
-FROM sbtscala/scala-sbt:eclipse-temurin-17.0.8_1.9.6_2.13.12 AS build
+FROM sbtscala/scala-sbt:eclipse-temurin-17.0.19_10_1.12.15_2.13.18 AS build
 WORKDIR /app
 COPY build.sbt .
 COPY project ./project
