@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f5f5f7;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.app__sync-banner,
+.app__error {
+  background: #fff3cd;
+  border: 1px solid #f0d58c;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.feedback-item {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  list-style: none;
+}
+
+.feedback-item__badge {
+  font-size: 0.75rem;
+  background: #eee;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.feedback-item__badge--flagged {
+  background: #fde2e1;
+}
+
+.feedback-item__error {
+  color: #b3261e;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
