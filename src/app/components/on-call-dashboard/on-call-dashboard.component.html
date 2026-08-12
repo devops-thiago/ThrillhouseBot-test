@@ -1,0 +1,17 @@
+<section class="dashboard">
+  <h1>On-call schedule</h1>
+
+  <p *ngIf="unacknowledgedShifts.length > 0" class="banner">
+    {{ unacknowledgedShifts.length }} shift(s) need acknowledgement
+  </p>
+
+  <div *ngIf="activeShift">
+    <h2>{{ activeShift.userName }} is on call</h2>
+    <app-handoff-note [note]="trustedHandoffNote"></app-handoff-note>
+  </div>
+
+  <form (submit)="downloadAttachment()">
+    <input [(ngModel)]="attachmentQuery" name="attachmentQuery" placeholder="attachment file name" />
+    <button type="submit">Download attachment</button>
+  </form>
+</section>
