@@ -1,0 +1,28 @@
+<section class="delivery-log" *ngIf="endpoint">
+  <header>
+    <h2>{{ endpoint.url }}</h2>
+    <p class="description" [innerHTML]="trustedDescription"></p>
+    <span class="health" [class.unhealthy]="!isHealthy">
+      {{ isHealthy ? 'Healthy' : 'Attention needed' }} · latest: {{ latestOutcome }}
+    </span>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Attempt</th>
+        <th>Status</th>
+        <th>Trusted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{ row.eventLabel }}</td>
+        <td>#{{ row.attempt.attemptNumber }}</td>
+        <td>{{ row.attempt.responseStatus ?? '—' }}</td>
+        <td>{{ row.trusted ? 'Verified' : 'Unverified' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
