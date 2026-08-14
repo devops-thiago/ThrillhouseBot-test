@@ -1,0 +1,33 @@
+<section class="review-queue">
+  <header>
+    <h1>Expense review</h1>
+    <p class="summary">{{ queueSummary }}</p>
+    <p class="banner warning" *ngIf="hasPolicyViolations">
+      Some claims on this page breach policy and need a second approver.
+    </p>
+    <p class="banner error" *ngIf="loadFailed">The queue could not be loaded.</p>
+  </header>
+
+  <table class="queue">
+    <tr>
+      <th>Claim</th>
+      <th>Submitter</th>
+      <th>Approver</th>
+      <th>Total</th>
+    </tr>
+    <tr *ngFor="let row of rows" (click)="select(row.claim)">
+      <td>{{ row.claim.id }}</td>
+      <td>{{ row.claim.submitterName }}</td>
+      <td>{{ row.approverName }}</td>
+      <td>{{ row.totalMinor / 100 | number: '1.2-2' }} {{ row.currency }}</td>
+    </tr>
+  </table>
+
+  <aside class="detail" *ngIf="selectedClaim as claim">
+    <h2>{{ claim.id }} &middot; {{ claim.submitterName }}</h2>
+    <div class="justification" [innerHTML]="trustedJustification"></div>
+    <ul class="receipts">
+      <li *ngFor="let link of receiptLinks(claim)"><a [href]="link">Receipt</a></li>
+    </ul>
+  </aside>
+</section>
