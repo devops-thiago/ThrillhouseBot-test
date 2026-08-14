@@ -1,0 +1,100 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1f2933;
+  background: #f5f7fa;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header h1 {
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.header .stats {
+  color: #52606d;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.header input,
+.header select {
+  padding: 6px 8px;
+  margin-right: 8px;
+}
+
+.body {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.queue {
+  flex: 0 0 280px;
+}
+
+.queue ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+.row.selected {
+  background: #d9e8ff;
+}
+
+.bulk {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+}
+
+.detail {
+  flex: 1;
+  background: #fff;
+  padding: 16px;
+}
+
+.detail .meta {
+  color: #52606d;
+  font-size: 13px;
+}
+
+.warn {
+  color: #a02b2b;
+}
+
+.lines {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.lines td {
+  border-top: 1px solid #e4e7eb;
+  padding: 4px 0;
+}
+
+.footer {
+  margin-top: 24px;
+  color: #7b8794;
+  font-size: 12px;
+}
