@@ -1,0 +1,27 @@
+#!/bin/sh
+# Minimal iCalendar renderer: writes the day view of a single room.
+# Usage: ics-render --room <room-id> --out <path>
+set -eu
+
+room=""
+out=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --room) room="$2"; shift 2 ;;
+        --out) out="$2"; shift 2 ;;
+        *) echo "unknown flag: $1" >&2; exit 2 ;;
+    esac
+done
+
+if [ -z "$room" ] || [ -z "$out" ]; then
+    echo "both --room and --out are required" >&2
+    exit 2
+fi
+
+{
+    echo "BEGIN:VCALENDAR"
+    echo "VERSION:2.0"
+    echo "PRODID:-//duckcorp//roomsvc//EN"
+    echo "X-WR-CALNAME:$room"
+    echo "END:VCALENDAR"
+} > "$out"

@@ -1,0 +1,15 @@
+[package]
+name = "roomsvc"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "roomsvc"
+path = "src/lib.rs"
+
+[[bin]]
+name = "roomsvc"
+path = "src/main.rs"
+
+[dependencies]
