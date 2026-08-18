@@ -1,0 +1,12 @@
+# Build output
+/go/bin/
+/go/certwatchd
+
+# Test and coverage artefacts
+*.out
+coverage.txt
+
+# Local tooling
+.idea/
+.vscode/
+.env
