@@ -1,0 +1,32 @@
+#!/bin/sh
+# Renders the handover log of a single rota as a markdown digest.
+# Usage: handover-digest --rota <rota-id> --out <path> --rows "<at>,<from>,<to>,<notes>;..."
+set -eu
+
+rota=""
+out=""
+rows=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --rota) rota="$2"; shift 2 ;;
+        --out) out="$2"; shift 2 ;;
+        --rows) rows="$2"; shift 2 ;;
+        *) echo "unknown flag: $1" >&2; exit 2 ;;
+    esac
+done
+
+if [ -z "$rota" ] || [ -z "$out" ]; then
+    echo "both --rota and --out are required" >&2
+    exit 2
+fi
+
+{
+    echo "# Handover log: $rota"
+    echo
+    echo "| at (min) | from | to | notes |"
+    echo "| --- | --- | --- | --- |"
+    printf '%s' "$rows" | tr ';' '\n' | while IFS=, read -r at from to notes; do
+        [ -n "$at" ] || continue
+        echo "| $at | $from | $to | $notes |"
+    done
+} > "$out"
