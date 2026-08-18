@@ -1,0 +1,14 @@
+{
+  "name": "usage-rollup",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aggregates per-tenant usage events into billable rollups and serves the current period's totals.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
