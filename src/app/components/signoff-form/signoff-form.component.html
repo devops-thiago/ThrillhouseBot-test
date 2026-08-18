@@ -1,0 +1,27 @@
+<form class="signoff" (ngSubmit)="submit()">
+  <h3>Record your review</h3>
+
+  <ul class="blockers" *ngIf="blockers.length > 0">
+    <li *ngFor="let blocker of blockers">{{ blocker }}</li>
+  </ul>
+
+  <p class="done" *ngIf="alreadySignedOff">You have already signed this postmortem off.</p>
+
+  <label>
+    <input type="radio" name="verdict" value="approved" [(ngModel)]="verdict" />
+    Approve
+  </label>
+  <label>
+    <input type="radio" name="verdict" value="changes_requested" [(ngModel)]="verdict" />
+    Request changes
+  </label>
+
+  <textarea
+    name="note"
+    rows="4"
+    [(ngModel)]="note"
+    placeholder="What the author should know"
+  ></textarea>
+
+  <button type="submit" [disabled]="!canSubmit">Submit review</button>
+</form>

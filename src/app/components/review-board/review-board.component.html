@@ -1,0 +1,75 @@
+<section class="review-board">
+  <header>
+    <h1>Postmortem review</h1>
+    <p class="summary">{{ boardSummary }}</p>
+    <p class="reviewer" *ngIf="reviewer as me">Reviewing as {{ me.displayName }} ({{ me.team }})</p>
+
+    <label class="filter">
+      Severity
+      <select [(ngModel)]="severityFilter">
+        <option value="all">All</option>
+        <option value="sev1">Sev1</option>
+        <option value="sev2">Sev2</option>
+        <option value="sev3">Sev3</option>
+      </select>
+    </label>
+
+    <p class="banner error" *ngIf="loadFailed">The review board could not be loaded.</p>
+  </header>
+
+  <table class="board">
+    <tr>
+      <th>Incident</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Severity</th>
+      <th>Waiting</th>
+      <th>Sign-offs</th>
+    </tr>
+    <tr *ngFor="let row of visibleRows" (click)="open(row)">
+      <td>{{ row.postmortem.incidentId }}</td>
+      <td>{{ row.postmortem.title }}</td>
+      <td>{{ row.postmortem.authorName }}</td>
+      <td>{{ row.postmortem.severity }}</td>
+      <td>{{ row.waitingDays }} day(s)</td>
+      <td>{{ row.signoffCount }} recorded, {{ row.signoffsOutstanding }} outstanding</td>
+    </tr>
+  </table>
+
+  <aside class="detail" *ngIf="selected as postmortem">
+    <h2>{{ postmortem.incidentId }} &middot; {{ postmortem.title }}</h2>
+    <p class="meta">
+      {{ postmortem.severity }} &middot; detected {{ postmortem.detectedAt }} &middot; written by
+      {{ postmortem.authorName }}
+    </p>
+    <p class="timeline" *ngIf="timelineUrl(postmortem) as url">
+      <a [href]="url">Incident timeline</a>
+    </p>
+
+    <div class="narrative" [innerHTML]="postmortem.narrativeHtml"></div>
+
+    <h3>Action items</h3>
+    <ul class="action-items">
+      <li *ngFor="let item of postmortem.actionItems">
+        {{ item.description }} &mdash; {{ item.ownerId || 'unassigned' }}, due
+        {{ item.dueOn || 'not set' }}
+        <a *ngIf="trackerUrl(item) as url" [href]="url">{{ item.trackerKey }}</a>
+      </li>
+    </ul>
+
+    <ul class="signoffs">
+      <li *ngFor="let signoff of postmortem.signoffs">
+        {{ signoff.reviewerId }} &mdash; {{ signoff.verdict }} on {{ signoff.recordedAt }}
+      </li>
+    </ul>
+
+    <p class="banner error" *ngIf="signoffError">{{ signoffError }}</p>
+
+    <app-signoff-form
+      [blockers]="selectedBlockers"
+      [alreadySignedOff]="selectedAlreadySignedOff"
+      [submitting]="submitting"
+      (signoff)="recordSignoff($event)"
+    ></app-signoff-form>
+  </aside>
+</section>
