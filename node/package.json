@@ -1,0 +1,11 @@
+{
+  "name": "room-booking-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Meeting room booking service with holds, conflict checks and calendar export",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  }
+}
