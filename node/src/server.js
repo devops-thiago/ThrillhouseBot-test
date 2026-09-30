@@ -2,12 +2,17 @@ import http from "node:http";
 import { loadConfig } from "./config.js";
 import { BookingStore } from "./bookings.js";
 import { exportRoomCalendar } from "./exporter.js";
+import { DirectoryClient } from "./directory.js";
+import { Mailer, notifyConfirmed } from "./notifier.js";
 
 const config = loadConfig();
 const store = new BookingStore({
   holdMinutes: config.holdTimeout,
   maxPerUser: config.maxBookingsPerUser,
 });
+
+const directory = new DirectoryClient(config.directoryUrl);
+const mailer = new Mailer();
 
 function readJson(req) {
   return new Promise((resolve, reject) => {
@@ -37,6 +42,13 @@ export const server = http.createServer(async (req, res) => {
         return send(res, 404, { error: "unknown room" });
       }
       return send(res, 201, store.create(body));
+    }
+    const confirm = url.pathname.match(/^\/bookings\/(\d+)\/confirm$/);
+    if (req.method === "POST" && confirm) {
+      const booking = store.confirm(Number(confirm[1]));
+      const email = await directory.emailFor(booking.userId, booking.roomId);
+      await notifyConfirmed(mailer, booking, email);
+      return send(res, 200, booking);
     }
     const room = url.pathname.match(/^\/rooms\/([^/]+)\/(bookings|export)$/);
     if (req.method === "GET" && room) {
