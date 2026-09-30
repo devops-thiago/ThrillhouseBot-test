@@ -1,0 +1,22 @@
+name: csharp-ci
+
+on:
+  pull_request:
+    paths:
+      - 'csharp/**'
+      - '.github/workflows/csharp-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Test
+        working-directory: csharp/tests
+        run: dotnet test
