@@ -1,0 +1,14 @@
+{
+  "name": "cfp-review-queue",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Conference talk proposal (CFP) review queue",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/cfp.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
