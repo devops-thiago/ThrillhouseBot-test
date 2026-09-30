@@ -1,0 +1,20 @@
+name: zig-ci
+
+on:
+  pull_request:
+    paths:
+      - "zig/**"
+      - ".github/workflows/zig-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: zig
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: 0.13.0
+      - run: zig build test
