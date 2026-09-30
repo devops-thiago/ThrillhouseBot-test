@@ -1,0 +1,20 @@
+{
+  "name": "parcel-tracking-board",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --outDir dist/parcel-tracking-board",
+    "test": "node --test \"test/*.test.ts\""
+  },
+  "dependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/platform-browser": "^19.0.0",
+    "rxjs": "^7.8.0",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.0"
+  }
+}

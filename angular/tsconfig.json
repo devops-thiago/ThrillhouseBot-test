@@ -1,0 +1,15 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "experimentalDecorators": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": false,
+    "emitDeclarationOnly": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
+}
