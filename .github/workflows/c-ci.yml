@@ -1,0 +1,22 @@
+name: c-ci
+
+on:
+  pull_request:
+    paths:
+      - "c/**"
+      - ".github/workflows/c-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends build-essential
+      - name: Build
+        run: make -C c
+      - name: Unit tests
+        run: make -C c test
