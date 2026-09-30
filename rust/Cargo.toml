@@ -1,0 +1,14 @@
+[package]
+name = "coldchain-logger"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "coldchain_logger"
+path = "src/lib.rs"
+
+[[bin]]
+name = "coldchain-logger"
+path = "src/main.rs"
+
+[dependencies]
