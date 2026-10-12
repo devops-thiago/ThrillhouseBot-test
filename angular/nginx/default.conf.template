@@ -1,0 +1,13 @@
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+
+    location /api/ {
+        proxy_pass ${BOOKING_API_UPSTREAM};
+        proxy_set_header Host $proxy_host;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
