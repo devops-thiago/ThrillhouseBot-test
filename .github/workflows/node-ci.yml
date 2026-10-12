@@ -1,0 +1,26 @@
+name: node-ci
+
+on:
+  pull_request:
+    paths:
+      - "node/**"
+      - ".github/workflows/node-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PORTAL_API_TOKEN: ${{ secrets.PORTAL_API_TOKEN }}
+    defaults:
+      run:
+        working-directory: node
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm test
