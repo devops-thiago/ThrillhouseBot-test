@@ -1,0 +1,31 @@
+name: python-ci
+
+on:
+  pull_request:
+    paths:
+      - "python/**"
+      - ".github/workflows/python-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    env:
+      API_TOKEN: ${{ secrets.API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Report price guide token availability
+        run: |
+          if [ -z "${API_TOKEN}" ]; then
+            echo "API_TOKEN is not set; price guide calls are not exercised"
+          fi
+      - name: Unit tests
+        run: python -m unittest discover -s tests -t . -v
