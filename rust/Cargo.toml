@@ -1,0 +1,14 @@
+[package]
+name = "solar-ingest"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "solar_ingest"
+path = "src/lib.rs"
+
+[[bin]]
+name = "solar-ingest"
+path = "src/main.rs"
+
+[dependencies]
