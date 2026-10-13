@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desk-invoicer
+  labels:
+    app: desk-invoicer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: desk-invoicer
+  template:
+    metadata:
+      labels:
+        app: desk-invoicer
+    spec:
+      containers:
+        - name: invoicer
+          image: ghcr.io/devops-thiago/desk-invoicer:1.0.0
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: desk-invoicer-env
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
