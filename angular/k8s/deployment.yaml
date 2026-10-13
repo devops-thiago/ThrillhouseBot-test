@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dental-recall-board
+  labels:
+    app: dental-recall-board
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dental-recall-board
+  template:
+    metadata:
+      labels:
+        app: dental-recall-board
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/devops-thiago/dental-recall-board:0.1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RECALL_API_UPSTREAM
+              value: http://recall-api.clinic.svc.cluster.local:8080/api/
+            - name: RECALL_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: recall-api
+                  key: token
+            - name: REMINDER_LEAD_TIME
+              value: "21"
+          securityContext:
+            privileged: true
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 128Mi

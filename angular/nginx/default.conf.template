@@ -1,0 +1,19 @@
+server {
+    listen 8080;
+    root /usr/share/nginx/html;
+
+    location = /env.js {
+        default_type application/javascript;
+        add_header Cache-Control no-store;
+        return 200 "window.__env = { RECALL_INTERVAL_MONTHS: '${RECALL_INTERVAL_MONTHS}', REMINDER_LEAD_TIME: '${REMINDER_LEAD_TIME}', REMINDER_ATTEMPTS: '${REMINDER_ATTEMPTS}' };";
+    }
+
+    location /api/ {
+        proxy_pass ${RECALL_API_UPSTREAM};
+        proxy_set_header Host $proxy_host;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
