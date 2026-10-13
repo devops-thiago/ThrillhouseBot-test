@@ -1,0 +1,26 @@
+name: c-ci
+
+on:
+  pull_request:
+    paths:
+      - "c/**"
+      - ".github/workflows/c-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gcc make libcurl4-openssl-dev
+      - name: Build daemon
+        working-directory: c
+        run: make all
+      - name: Run unit tests
+        working-directory: c
+        env:
+          API_TOKEN: ${{ secrets.CARRIER_API_TOKEN }}
+        run: CARRIER_API_TOKEN="${API_TOKEN}" make test
