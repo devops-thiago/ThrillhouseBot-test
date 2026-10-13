@@ -1,0 +1,8 @@
+[package]
+name = "turbine-alerts"
+version = "0.1.0"
+edition = "2021"
+description = "Ingests turbine vibration batches and pages on-call when RMS velocity crosses ISO 10816 zones"
+publish = false
+
+[dependencies]
