@@ -1,0 +1,17 @@
+name: c-ci
+on:
+  pull_request:
+    paths:
+      - 'c/**'
+      - '.github/workflows/c-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run unit tests
+        run: make -C c test
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
