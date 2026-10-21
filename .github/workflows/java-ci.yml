@@ -1,0 +1,24 @@
+name: java-ci
+
+on:
+  pull_request:
+    paths:
+      - 'java/**'
+      - '.github/workflows/java-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      BLOODBANK_API_TOKEN: ${{ secrets.BLOODBANK_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/pom.xml
+      - name: Run unit tests
+        working-directory: java
+        run: mvn -B test
