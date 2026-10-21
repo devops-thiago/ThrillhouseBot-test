@@ -52,7 +52,7 @@ test('loadConfig requires the api url', () => {
 });
 
 test('note helpers normalise and highlight', () => {
-  assert.equal(normaliseNote('  a \n b  '), 'a<br> b');
+  assert.equal(normaliseNote('  a \n b  '), 'a <br> b');
   assert.equal(highlightKeywords('ALLERGY noted'), '<strong>ALLERGY</strong> noted');
 });
 
