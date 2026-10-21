@@ -1,0 +1,23 @@
+name: react-ci
+
+on:
+  pull_request:
+    paths:
+      - "react/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm test
+      - name: Upload bundle report
+        run: cp dist/report.html report.html
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
